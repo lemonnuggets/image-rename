@@ -1,5 +1,6 @@
 import subprocess
 import os
+import maya
 from PIL import Image
 from PIL.ExifTags import TAGS
 
@@ -21,16 +22,31 @@ image_extensions = ('.png', '.jpg', '.jpeg')
 #         info_dict[tag] = data
 #     return info_dict
 
-def get_datetime(img_path):
+def get_datetime(img_path, extension):
+    required_exif_tags = ('DateTimeOriginal','DateTimeDigitized','DateTime')
+    required_info_tags = ('data:create', 'date:modify')
     info_dict = {}
     image = Image.open(img_path)
+    if extension == '.png':
+        image.load()
+        # print(image.info)
+        datetime = None
+        for tag in required_info_tags:
+            if tag in image.info:
+                datetime = image.info[tag]
+        if datetime != None:
+            # print(maya.parse(datetime).datetime())
+            datetime = maya.parse(datetime).datetime()
+            date = datetime.date()
+            time = datetime.time()
+            return f'{date} {time}'
     exif_data = image.getexif()
-    required_tags = ('DateTimeOriginal','DateTimeDigitized','DateTime')
+    # print(exif_data)
     # iterating over all EXIF data fields
     for tag_id in exif_data:
         # get the tag name, instead of human unreadable tag id
         tag = TAGS.get(tag_id, tag_id)
-        if tag not in required_tags:
+        if tag not in required_exif_tags:
             continue
         data = exif_data.get(tag_id)
         # decode bytes 
@@ -38,9 +54,9 @@ def get_datetime(img_path):
             data = data.decode('iso-8859-1', 'replace')
         info_dict[tag] = data
 
-    # returns value of highest priority tag from required_tags
+    # returns value of highest priority tag from required_exif_tags
     # that exists within the image metadata
-    for tag in required_tags:
+    for tag in required_exif_tags:
         if tag in info_dict.keys():
             return info_dict[tag]
 
@@ -52,11 +68,11 @@ def handle_file(file_path):
     if extension not in image_extensions:
         return -1
 
-    datetime = get_datetime(file_path)
+    datetime = get_datetime(file_path, extension)
     if datetime != None:
         datetime = datetime.replace(':', '-')
         print(f'{head}\\{datetime}{extension}')
-        os.rename(file_path, f'{head}\\{datetime}{extension}')
+        # os.rename(file_path, f'{head}\\{datetime}{extension}')
     return 0
 
 def recursive_file_search(paths):
