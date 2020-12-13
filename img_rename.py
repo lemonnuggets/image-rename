@@ -1,4 +1,3 @@
-import subprocess
 import os
 import maya
 from PIL import Image
@@ -29,19 +28,16 @@ def get_datetime(img_path, extension):
     image = Image.open(img_path)
     if extension == '.png':
         image.load()
-        # print(image.info)
         datetime = None
         for tag in required_info_tags:
             if tag in image.info:
                 datetime = image.info[tag]
-        if datetime != None:
-            # print(maya.parse(datetime).datetime())
+        if datetime is not None:
             datetime = maya.parse(datetime).datetime()
             date = datetime.date()
             time = datetime.time()
             return f'{date} {time}'
     exif_data = image.getexif()
-    # print(exif_data)
     # iterating over all EXIF data fields
     for tag_id in exif_data:
         # get the tag name, instead of human unreadable tag id
@@ -69,10 +65,10 @@ def handle_file(file_path):
         return -1
 
     datetime = get_datetime(file_path, extension)
-    if datetime != None:
+    if datetime is not None:
         datetime = datetime.replace(':', '-')
         print(f'{head}\\{datetime}{extension}')
-        # os.rename(file_path, f'{head}\\{datetime}{extension}')
+        os.rename(file_path, f'{head}\\{datetime}{extension}')
     return 0
 
 def recursive_file_search(paths):
