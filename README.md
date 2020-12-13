@@ -1,5 +1,6 @@
 # image-rename
-  Recursively renames files in folders and subfolders in the format {yyyy-mm-dd hrs-min-sec}.extension
+  Recursively renames files in folders and subfolders in the format {yyyy-mm-dd hrs-min-sec}.extension.
+  
   Files without date-time info are left untouched.
   
 # Prerequisites
