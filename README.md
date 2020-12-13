@@ -3,11 +3,11 @@
   Files without date-time info are left untouched.
   
 # Prerequisites
-  Ensure Pillow is installed.
+  ## Pillow
   
   [Installation Guide](https://pillow.readthedocs.io/en/latest/installation.html)
   
-  Install Maya
+  ## Maya
 
   [Installation Guide](https://github.com/timofurrer/maya#-installing-maya)
 
@@ -15,6 +15,8 @@
   `./img_rename.py path/to/folder1 ./relative/path/to/folder2`
 
 # TODO
-  [ ] Allow a -r flag to make recursive nature optional
-  [ ] An option to make a copy of the file instead of renaming it
-  [ ] Get metadata from windows instead of image file (or give user the choice)
+  - [ ] Allow a -r flag to make recursive nature optional
+  
+  - [ ] An option to make a copy of the file instead of renaming it
+  
+  - [ ] Get metadata from windows instead of image file (or give user the choice)
